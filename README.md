@@ -12,7 +12,7 @@
 
 ### Liens vers d'autres projets plus important :
   
-- [MINISHELL](): Création d'un shell simplifié, pour comprendre le fonctionnement des shells et la programmation système.
+- [MINISHELL](https://github.com/LaDeniseDe42/MINISHELL): Création d'un shell simplifié, pour comprendre le fonctionnement des shells et la programmation système.
 - [TRANSCENDENCE](https://github.com/LaDeniseDe42/TRANSCENDENCE): Un projet complet permettant de disputer des parties de Pong en ligne
 - [CUB3D](https://github.com/LaDeniseDe42/CUB3D): Un projet graphique utilisant le RAY-Casting pour simuler du 3D dans un jeu.
 - [FT_IRC](): La création d'un serveur IRC (Internet Relai Chat) compatible avec le client IRSSI.
