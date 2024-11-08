@@ -9,4 +9,13 @@
 - **SO_LONG**: Jeu 2D simple utilisant la miniLibX, introduisant aux textures, sprites et tuiles.
 - **PHILOSOPHERS**: Gestion de threads et de processus pour simuler le problème des philosophes qui mangent.
 - **PIPEX**: Le projet nous fait decouvrir les redirections et les pipes.
-- **MINISHELL**: Création d'un shell simplifié, pour comprendre le fonctionnement des shells et la programmation système.
+
+### Liens vers d'autres projets plus important :
+  
+- [MINISHELL](): Création d'un shell simplifié, pour comprendre le fonctionnement des shells et la programmation système.
+- [TRANSCENDENCE](https://github.com/LaDeniseDe42/TRANSCENDENCE): Un projet complet permettant de disputer des parties de Pong en ligne
+- [CUB3D](https://github.com/LaDeniseDe42/CUB3D): Un projet graphique utilisant le RAY-Casting pour simuler du 3D dans un jeu.
+- [FT_IRC](): La création d'un serveur IRC (Internet Relai Chat) compatible avec le client IRSSI.
+
+### Lien vers la "piscine" C++ :
+[CPP-MODULES](https://github.com/LaDeniseDe42/CPP-Modules) : Une serie d'exercices a difficulte graduelle pour se plonger dans l'univers du C++
