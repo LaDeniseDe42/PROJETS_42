@@ -1,0 +1,170 @@
+void	*start_routine(void *arg)
+{
+	pthread_t		tid;
+	t_counter		*counter;
+	unsigned int	i;
+
+	counter = (t_counter *)arg;
+	tid = pthread_self();
+	pthread_mutex_lock(&counter->count_mutex);
+	printf("%sThread [%lu]: Le plus grand ennui c'est d'exister sans vivre.%s\n",
+		YELLOW,
+		(unsigned long)tid,
+		NC);
+	pthread_mutex_unlock(&counter->count_mutex);
+	i = 0;
+	while (i < TIMES_TO_COUNT)
+	{
+		pthread_mutex_lock(&counter->count_mutex);
+		counter->count++;
+		pthread_mutex_unlock(&counter->count_mutex);
+		i++;
+	}
+	pthread_mutex_lock(&counter->count_mutex);
+	printf("%sThread [%ld]: Compte final = %u.%s\n",
+		BYELLOW,
+		(unsigned long)tid,
+		counter->count,
+		NC);
+	pthread_mutex_unlock(&counter->count_mutex);
+	return (NULL);
+	return (NULL);
+}
+
+int	main(int argc, char **argv)
+{
+	pthread_t	tid1;
+	pthread_t	tid2;
+	t_counter	counter;
+
+	counter.count = 0;
+	(void)argc;
+	(void)argv;
+	pthread_mutex_init(&counter.count_mutex, NULL);
+	printf("Main: Le compte attendu est de %s%u%s\n", GREEN, 2 * TIMES_TO_COUNT,
+		NC);
+	pthread_create(&tid1, NULL, start_routine, &counter);
+	printf("Main: Creation du premier thread [%ld]\n", (unsigned long)tid1);
+	pthread_create(&tid2, NULL, start_routine, &counter);
+	printf("Main: Creation du second thread [%ld]\n", (unsigned long)tid2);
+	pthread_join(tid1, NULL);
+	printf("Main: Union du premier thread [%ld]\n", (unsigned long)tid1);
+	pthread_join(tid2, NULL);
+	printf("Main: Union du second thread [%ld]\n", (unsigned long)tid2);
+	pthread_mutex_destroy(&counter.count_mutex);
+	if (counter.count != (2 * TIMES_TO_COUNT))
+		printf("%sMain: ERREUR ! Le compte est de %u%s\n",
+					RED, counter.count, NC);
+	else
+		printf("%sMain: OK. Le compte est de %u%s\n",
+					GREEN, counter.count, NC);
+	return (0);
+}
+
+
+		// printf("time_to_die / 1000 = [%d]\n", p->rules->time_to_die / 1000);
+		// printf("how_much_time() = [%lld]\n", how_much_time() / 1000);
+		// printf("last_eat = [%lld]\n", p[0].last_eat / 1000);
+		// printf("how_much_time() - last_eat = [%lld]\n", how_much_time() - p[0].last_eat);
+
+
+
+
+
+		void	*start_routine(void *arg)
+{
+	t_un_philo	*p;
+
+	p = arg;
+	if (p->id % 2 != 0)
+		ft_sleep(p->rules->time_to_die);
+	while (1)
+	{
+		pthread_mutex_lock(&(p->fork[(p->id)]));
+		print_script(how_much_time() - p->rules->milli_s, p->id,
+			"has taken a fork\n", &p->rules->msg);
+		pthread_mutex_lock(&(p->fork[(p->id + 1) % p->rules->nb_philo]));
+		print_script(how_much_time() - p->rules->milli_s, p->id,
+			"has taken a fork\n", &p->rules->msg);
+		p->last_eat = how_much_time();
+		print_script(how_much_time() - p->rules->milli_s, p->id, "is eating\n",
+			&p->rules->msg);
+		ft_sleep(p->rules->time_to_eat);
+		p->eated++;
+		pthread_mutex_unlock(&(p->fork[(p->id + 1) % p->rules->nb_philo]));
+		pthread_mutex_unlock(&(p->fork[(p->id)]));
+		print_script(how_much_time() - p->rules->milli_s, p->id, "is sleeping\n",
+			&p->rules->msg);
+		ft_sleep(p->rules->time_to_sleep);
+		print_script(how_much_time() - p->rules->milli_s, p->id, "is thinking\n",
+			&p->rules->msg);
+	}
+	return (0);
+}
+
+static bool	philo_init(t_rules *rules, t_un_philo *philo, pthread_mutex_t *fork)
+{
+	int			i;
+
+	i = 0;
+	while (i < rules->nb_philo)
+	{
+		philo[i].id = i;
+		philo[i].eated = 0;
+		philo[i].fork = fork;
+		philo[i].rules = rules;
+		philo[i].last_eat = rules->milli_s;
+		pthread_create(&(philo[i].platon), NULL, &start_routine, &(philo[i]));
+		i++;
+		usleep(100);
+	}
+	i = 0;
+	while (i < rules->nb_philo)
+	{
+		pthread_join(philo[i].platon, NULL);
+		i++;
+	}
+	return (true);
+}
+
+// static bool	philo_init(t_rules *rules, t_un_philo *philo, pthread_mutex_t *fork)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < rules->nb_philo)
+// 	{
+// 		philo[i].id = i;
+// 		philo[i].eated = 0;
+// 		philo[i].fork = fork;
+// 		philo[i].rules = rules;
+// 		philo[i].last_eat = rules->milli_s;
+// 		pthread_create(&(philo[i].platon), NULL, &start_routine, &(philo[i]));
+// 		i++;
+// 		usleep(100);
+// 	}
+// 	i = 0;
+// 	while (i < rules->nb_philo)
+// 	{
+// 		pthread_join(philo[i].platon, NULL);
+// 		i++;
+// 	}
+// 	return (true);
+// }
+
+
+int	wait_threads(t_un_philo *philo)
+{
+	int	i;
+	int	return_code;
+
+	i = 0;
+	return_code = 1;
+	while (i < philo->rules->nb_philo)
+	{
+		if (pthread_join(philo[i].platon, NULL))
+			return_code = 0;
+		i++;
+	}
+	return (return_code);
+}
